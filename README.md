@@ -1,4 +1,3 @@
-# LABORATORIO-4-SESION-6
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -104,8 +103,10 @@
             display: none; /* Hide rows with 'hidden' class */
         }
 
-        .buy-button {
-            display: none; /* Hide the buy button initially */
+        .added {
+            display: none; /* Hide 'Añadido' text initially */
+            color: green; /* Set color to green */
+            font-weight: bold; /* Make text bold */
         }
     </style>
 </head>
@@ -129,24 +130,28 @@
                 <td>Televisor</td>
                 <td>1500 soles</td>
                 <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS441HsMyz-0yZdzJx3lqC4O81OZaJzzqqzphA8HKLoTA&s" alt="Televisor"></td>
-                <td><button class="buy-button">Comprar</button></td>
+                <td><button class="buy-button" data-product-id="001">Comprar</button><span class="added">Añadido</span></td>
             </tr>
             <tr>
                 <td>002</td>
                 <td>Microondas</td>
                 <td>650 soles</td>
                 <td><img src="https://www.lg.com/content/dam/channel/wcms/pe/images/microondas/mh7032jas_bbkglpr_espr_pe_c/Basic-450.jpg" alt="Microondas"></td>
-                <td><button class="buy-button">Comprar</button></td>
+                <td><button class="buy-button" data-product-id="002">Comprar</button><span class="added">Añadido</span></td>
             </tr>
             <tr>
                 <td>003</td>
                 <td>Refrigerador</td>
                 <td>1000 soles</td>
                 <td><img src="https://cdn11.bigcommerce.com/s-dj46qhetxl/images/stencil/1280x1280/products/137849/386895/irdrotqaqdqdnbj7lqkq__78811.1692328643.jpg?c=1" alt="Refrigerador"></td>
-                <td><button class="buy-button">Comprar</button></td>
+                <td><button class="buy-button" data-product-id="003">Comprar</button><span class="added">Añadido</span></td>
             </tr>
         </table>
         <a href="#" class="button" id="showMoreBtn">Ver más</a>
+        <div id="cart">
+            <h2>Carrito de Compras</h2>
+            <ul id="cartItems"></ul>
+        </div>
     </div>
     
     <!-- Optional JavaScript; choose one of the two! -->
@@ -179,6 +184,38 @@
                 });
             }
         });
+
+        // Add event listener to buy buttons
+        var buyButtons = document.querySelectorAll('.buy-button');
+        buyButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var productId = this.getAttribute('data-product-id');
+                var productName = this.parentNode.parentNode.querySelector('td:nth-child(2)').innerText;
+                var price = this.parentNode.parentNode.querySelector('td:nth-child(3)').innerText;
+                addToCart(productId, productName, price);
+                toggleButtonState(this); // Toggle button state
+            });
+        });
+
+        // Function to add item to cart
+        function addToCart(productId, productName, price) {
+            var cartItems = document.getElementById('cartItems');
+            var newItem = document.createElement('li');
+            newItem.innerText = productName + ' - ' + price;
+            cartItems.appendChild(newItem);
+        }
+
+        // Function to toggle button state
+        function toggleButtonState(button) {
+            var addedText = button.parentNode.querySelector('.added');
+            if (button.innerText === 'Comprar') {
+                button.innerText = 'Añadido';
+                addedText.style.display = 'inline'; // Show the 'Añadido' text
+            } else {
+                button.innerText = 'Comprar';
+                addedText.style.display = 'none'; // Hide the 'Añadido' text
+            }
+        }
     </script>
 </body>
 </html>
