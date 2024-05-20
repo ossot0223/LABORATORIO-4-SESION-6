@@ -108,6 +108,21 @@
             color: green; /* Set color to green */
             font-weight: bold; /* Make text bold */
         }
+
+        .added-row {
+            background-color: lightgreen; /* Set background color for added row */
+            transition: background-color 0.5s ease; /* Smooth transition */
+        }
+
+        #paymentForm {
+            display: none; /* Hide payment form initially */
+            margin-top: 20px;
+        }
+
+        .payment-method {
+            display: block;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -151,6 +166,12 @@
         <div id="cart">
             <h2>Carrito de Compras</h2>
             <ul id="cartItems"></ul>
+            <form id="paymentForm">
+                <h3>Seleccionar Método de Pago</h3>
+                <label><input type="radio" name="paymentMethod" value="tarjeta" class="payment-method"> Tarjeta de Crédito</label><br>
+                <label><input type="radio" name="paymentMethod" value="efectivo" class="payment-method"> Efectivo</label><br>
+                <button type="submit" class="button">Realizar Pago</button>
+            </form>
         </div>
     </div>
     
@@ -194,6 +215,7 @@
                 var price = this.parentNode.parentNode.querySelector('td:nth-child(3)').innerText;
                 addToCart(productId, productName, price);
                 toggleButtonState(this); // Toggle button state
+                highlightRow(this.parentNode.parentNode); // Highlight row
             });
         });
 
@@ -216,6 +238,32 @@
                 addedText.style.display = 'none'; // Hide the 'Añadido' text
             }
         }
+
+        // Function to highlight row
+        function highlightRow(row) {
+            row.classList.add('added-row'); // Add the 'added-row' class
+            setTimeout(function() {
+                row.classList.remove('added-row'); // Remove the 'added-row' class after 1 second
+            }, 1000);
+        }
+
+        // Add event listener to payment form
+        document.getElementById('cart').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            var selectedMethod = document.querySelector('input[name="paymentMethod"]:checked');
+            if (selectedMethod) {
+                alert('Pago realizado con éxito mediante ' + selectedMethod.value);
+                clearCart(); // Clear cart after successful payment
+            } else {
+                alert('Por favor, selecciona un método de pago.');
+            }
+        });
+
+        // Function to clear cart
+        function clearCart() {
+            document.getElementById('cartItems').innerHTML = ''; // Clear cart items
+        }
     </script>
 </body>
 </html>
+
